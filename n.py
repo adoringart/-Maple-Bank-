@@ -1,3 +1,4 @@
+#simple bank with just some extra error checking really
 import sys
 import re
 
