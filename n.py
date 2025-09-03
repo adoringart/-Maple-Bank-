@@ -29,53 +29,67 @@ class Bank:
         return f'account for {name} created.'
 
 
-print('Welcome to Maple bank!\nPlease select an option below:\n1.Create account\n2.Deposit\n3.Withdraw\n4.Check balance\n5.Apply interest\n6.Exit')
+print('Welcome to Maple bank!\nPlease select an option below:\n1.Deposit\n2.Withdraw\n3.Check balance\n4.Apply interest\n5.Exit')
 print('kindly only provide the numerical representation.')
 
 
 bank = Bank()
-
+name=input('name: ')
 while True:
     choice = input('menu: ').lower()
     if choice == '1':
-        name = input('name: ')
-        f = bank.create_account(name)
-        print(f)
+        bank.create_account(name)
+        no = input('enter deposit: ')
+        try:
+            y = re.search(r'(\d+\.?\d*)', no)
+            n = float(y.group(1))
+            if n>0:
+                f = bank.dep(n)
+            else:
+                print('only deposit positive sums.')
+        except AttributeError:
+            print('please provid valid data.')
 
     elif choice == '2':
-        no = input('enter deposit: ')
-        y = re.search(r'(\d+\.?\d*)', no)
-        n = float(y.group(1))
-        f = bank.dep(n)
-
-    elif choice == '3':
+        bank.create_account(name)
         wo = input('withdrawal amount: ')
-        k = re.search(r'(\d+\.?\d*)', wo)
-        w = float(k.group(1))
-        f = bank.withdraw(w)
-
-    elif choice == '4':
+        try:
+            k = re.search(r'(\d+\.?\d*)', wo)
+            w = float(k.group(1))
+            if w<bank._balance:
+                f = bank.withdraw(w)
+            else:
+                raise ValueError('withdrawal amount too high for current balance.')
+        except AttributeError:
+            print('please provid valid data.')
+    elif choice == '3':
+        bank.create_account(name)
         print(bank._balance)
 
-    elif choice == '5':
+    elif choice == '4':
+        bank.create_account(name)
         data = input('give principal,rate and time: ')
-        a = re.search(r'p.+?(\d+\.?\d*?)', data)
-        pa = a.group(1)
-        p = float(pa)
+        try:
+            a = re.search(r'p.+?(\d+\.?\d*?)', data)
+            pa = a.group(1)
+            p = float(pa)
 
-        b = re.search(r'r.+?(\d+\.?\d*?)', data)
+            b = re.search(r'r.+?(\d+\.?\d*?)', data)
 
-        rob = float(b.group(1))
-        r = rob/100
+            rob = float(b.group(1))
+            r = rob/100
 
-        c = re.search(r't.+?(\d+\.?\d*?)', data)
-        ta = c.group(1)
-        t = float(ta)
+            c = re.search(r't.+?(\d+\.?\d*?)', data)
+            ta = c.group(1)
+            t = float(ta)
 
-        print(bank.amount(p, r, t))
+            print(bank.amount(p, r, t))
+        except AttributeError:
+            print('please provide valid data.')
 
-    elif choice == '6':
-        sys.exit()
+    elif choice == '5':
+        sys.exit('have a great day!')
 
     else:
         print('invalid input.')
+        break
