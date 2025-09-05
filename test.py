@@ -1,1 +1,1 @@
-print('suki suki')
+
